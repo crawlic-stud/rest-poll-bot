@@ -27,17 +27,6 @@ services:
       - "${MONGO_PORT}:${MONGO_PORT}"
     volumes:
       - mongo-data:/data/db
-  # admin:
-  #   build:
-  #     context: ./admin/
-  #   restart: always
-  #   container_name: winebot-admin
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "8000:8000"
-  #   cpus: 0.3
-  #   mem_limit: 100M
 volumes:
   mongo-data:
     driver: local
