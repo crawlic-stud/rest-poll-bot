@@ -10,5 +10,7 @@ class Settings(BaseSettings):
     MONGO_HOST: str
     DB_NAME: str
 
+    ADMIN_ID: int
+
 
 settings = Settings()

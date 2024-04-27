@@ -30,7 +30,7 @@ SHOW_ACTION = "show"
 ADD_ACTION = "add"
 CHOICE_ADD = "choice_add"
 CHOICE_RESET = "choice_reset"
-
+CONTINUE = "continue"
 
 poll_where_map = {SPB: "СПБ", MOSCOW: "Москва", REGIONS: "Регионы"}
 polls_ram = {}
@@ -39,8 +39,9 @@ polls_ram = {}
 logging.basicConfig(level=logging.INFO)
 
 
-@dp.message(F.poll)
+@dp.message(F.poll, F.from_user.id == settings.ADMIN_ID)
 async def register_new_poll(m: types.Message):
+    m.from_user.id
     await m.reply(
         "Куда добавить этот опрос?",
         reply_markup=types.InlineKeyboardMarkup(
@@ -159,9 +160,33 @@ async def add_poll_to_db(
 @dp.message(CommandStart())
 async def show_where_polls(m: types.Message):
     await m.answer(
+        "Привет! Вот простые инструкции о том, как проголосовать за любимый проект:\n"
+        " 1 Вы можете голосовать за несколько проектов\n"
+        " 2 Если в один день вы проголосовали за один проект, а в другой день вам хочется добавить голос ещё за другой проект, то необходимо: "
+        "зажать сообщение с опросом ➡️ выбрать в выпадающем списке «отменить голос». После этого выбрать заново все заведения за которые хочется проголосовать.\n"
+        "Enjoy!",
+        reply_markup=types.InlineKeyboardMarkup(
+            inline_keyboard=[
+                [types.InlineKeyboardButton(text="Продолжить", callback_data=CONTINUE)]
+            ]
+        ),
+    )
+
+
+@dp.callback_query(F.data == CONTINUE)
+async def show_where_polls(query: types.CallbackQuery):
+    await query.message.answer(
         "Где голосуете?",
         reply_markup=types.InlineKeyboardMarkup(
             inline_keyboard=[
+                [
+                    types.InlineKeyboardButton(
+                        text=poll_where_map[REGIONS],
+                        callback_data=PollCallbackData(
+                            action=SHOW_ACTION, where=REGIONS
+                        ).pack(),
+                    )
+                ],
                 [
                     types.InlineKeyboardButton(
                         text=poll_where_map[SPB],
@@ -175,14 +200,6 @@ async def show_where_polls(m: types.Message):
                         text=poll_where_map[MOSCOW],
                         callback_data=PollCallbackData(
                             action=SHOW_ACTION, where=MOSCOW
-                        ).pack(),
-                    )
-                ],
-                [
-                    types.InlineKeyboardButton(
-                        text=poll_where_map[REGIONS],
-                        callback_data=PollCallbackData(
-                            action=SHOW_ACTION, where=REGIONS
                         ).pack(),
                     )
                 ],
@@ -202,7 +219,7 @@ async def show_poll(query: types.CallbackQuery, callback_data: PollCallbackData)
     sent_messages = []
     for poll in polls.polls:
         poll_message = await bot.forward_message(
-            query.message.chat.id, poll.chat_id, poll.message_id
+            query.message.chat.id, poll.chat_id, poll.message_id, protect_content=True
         )
         sent_messages.append(poll_message)
     return sent_messages
