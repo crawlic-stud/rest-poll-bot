@@ -6,27 +6,27 @@ services:
       context: .
       dockerfile: ./Dockerfile
     container_name: poll-bot
-    depends_on:
-      - mongo
+    # depends_on:
+    #   - mongo
     env_file:
       - .env
     cpus: 0.4 
     mem_limit: 200M
-  mongo:
-    restart: always
-    image: mongo:latest
-    container_name: poll-bot-mongo
-    cpus: 0.3  
-    mem_limit: 200M
-    env_file:
-      - .env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-    ports:
-      - "${MONGO_PORT}:${MONGO_PORT}"
-    volumes:
-      - mongo-data:/data/db
-volumes:
-  mongo-data:
-    driver: local
+  # mongo:
+  #   restart: always
+  #   image: mongo:latest
+  #   container_name: poll-bot-mongo
+  #   cpus: 0.3  
+  #   mem_limit: 200M
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+  #     - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+  #   ports:
+  #     - "${MONGO_PORT}:${MONGO_PORT}"
+  #   volumes:
+  #     - mongo-data:/data/db
+# volumes:
+#   mongo-data:
+#     driver: local
