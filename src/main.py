@@ -157,7 +157,6 @@ async def add_poll_to_db(
     )
 
 
-@dp.message(CommandStart())
 async def show_where_polls(m: types.Message):
     await m.answer(
         "Привет! Вот простые инструкции о том, как проголосовать за любимый проект:\n"
@@ -173,9 +172,10 @@ async def show_where_polls(m: types.Message):
     )
 
 
-@dp.callback_query(F.data == CONTINUE)
-async def show_where_polls(query: types.CallbackQuery):
-    await query.message.answer(
+# @dp.callback_query(F.data == CONTINUE)
+@dp.message(CommandStart())
+async def show_where_polls(message: types.Message):
+    await message.answer(
         "Где голосуете?",
         reply_markup=types.InlineKeyboardMarkup(
             inline_keyboard=[
