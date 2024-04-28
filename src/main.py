@@ -32,7 +32,7 @@ CHOICE_ADD = "choice_add"
 CHOICE_RESET = "choice_reset"
 CONTINUE = "continue"
 
-poll_where_map = {SPB: "СПБ", MOSCOW: "Москва", REGIONS: "Регионы"}
+poll_where_map = {SPB: "Санкт-Петербург", MOSCOW: "Москва", REGIONS: "Регионы"}
 polls_ram = {}
 
 
