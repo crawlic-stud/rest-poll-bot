@@ -6,7 +6,7 @@ from settings import settings
 from models import Poll
 
 DB_NAME = settings.DB_NAME
-MONGO_URL = f"mongodb://{settings.MONGO_USER}:{settings.MONGO_PASSWORD}@{settings.MONGO_HOST}:{settings.MONGO_PORT}"
+MONGO_URL = f"mongodb://{settings.MONGO_HOST}:{settings.MONGO_PORT}" # {settings.MONGO_USER}:{settings.MONGO_PASSWORD}@
 client = AsyncIOMotorClient(MONGO_URL)
 client.get_io_loop = asyncio.get_running_loop
 
