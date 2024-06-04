@@ -10,13 +10,13 @@ services:
       - mongo
     env_file:
       - .env
-    cpus: 0.2
+    cpus: 0.4
     mem_limit: 200M
   mongo:
     restart: always
     image: mongo:latest
     container_name: poll-bot-mongo
-    cpus: 0.2  
+    cpus: 0.4  
     mem_limit: 200M
     env_file:
       - .env
